@@ -14,8 +14,9 @@ class GroupAdmin(admin.ModelAdmin):
 
 class ReportAdmin(admin.ModelAdmin):
     date_hierarchy = 'reported'
-    list_display = ('get_identifier', 'document_uri', 'blocked_uri',
+    list_display = ('__unicode__', 'document_uri', 'blocked_uri',
                     'violated_directive', 'referrer', 'reported')
+    list_filter = ('document_uri', 'violated_directive', 'group')
     readonly_fields = ('group', 'document_uri', 'blocked_uri', 'referrer',
                        'violated_directive', 'original_policy', 'reported')
 

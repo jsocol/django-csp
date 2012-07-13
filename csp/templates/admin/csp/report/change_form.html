@@ -1,0 +1,33 @@
+{% extends "admin/change_form.html" %}
+
+{% block bodyclass %}{{ block.super }} csp-report{% endblock %}
+
+{% block content_title %}<h1>View CSP Violation Report</h1>{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <div class="form-row">
+    Group: <a href="{% url admin:csp_group_change original.group.pk %}">{{ original.group }}</a><br>
+    Group ID: {{ original.group.identifier }}
+  </div>
+  <div class="form-row">
+    Document URI: <a href="{{ original.document_uri }}" target="_blank">{{ original.document_uri }}</a>
+  </div>
+  <div class="form-row">
+    Blocked URI: {{ original.blocked_uri }}
+  </div>
+  <div class="form-row">
+    Referrer: {{ original.referrer }}
+  </div>
+  <div class="form-row">
+    Violated Directive: {{ original.violated_directive }}
+  </div>
+  <div class="form-row">
+    Reported: {{ original.reported }}
+  </div>
+  <div class="form-row">
+    Original Policy:
+    <pre>{{ original.original_policy }}</pre>
+  </div>
+</div>
+{% endblock %}

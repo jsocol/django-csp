@@ -15,7 +15,7 @@ class Group(models.Model):
     """A group of similar violation reports."""
     name = models.CharField(max_length=200, verbose_name='Report Group',
                             help_text='A human-readable name for a group.')
-    identifier = models.CharField(max_length=40, verbose_name='Group Hash',
+    identifier = models.CharField(max_length=40, verbose_name='Group ID',
                                   help_text='A unique identifier for a group.',
                                   unique=True)
 
@@ -44,14 +44,18 @@ class Group(models.Model):
 
 class Report(models.Model):
     """A representation of one report."""
-    group = models.ForeignKey(Group, null=True, blank=True)
-    document_uri = models.URLField(max_length=400, db_index=True)
+    group = models.ForeignKey(Group, null=True, blank=True,
+                              verbose_name='Group')
+    document_uri = models.URLField(max_length=400, db_index=True,
+                                   verbose_name='Document URI')
     blocked_uri = models.URLField(max_length=400, null=True, blank=True,
-                                  db_index=True)
+                                  db_index=True, verbose_name='Blocked URI')
     referrer = models.URLField(max_length=400, null=True, blank=True)
     violated_directive = models.CharField(max_length=1000, null=True,
-                                          blank=True, db_index=True)
-    original_policy = models.TextField(null=True, blank=True)
+                                          blank=True, db_index=True,
+                                          verbose_name='Violated Directive')
+    original_policy = models.TextField(null=True, blank=True,
+                                       verbose_name='Original Policy')
     reported = models.DateTimeField(default=datetime.now, db_index=True)
 
     @classmethod
@@ -62,7 +66,7 @@ class Report(models.Model):
         return cls(**kw)
 
     def __unicode__(self):
-        return self.get_identifier()
+        return u'%s - %s' % (self.group, self.pk)
 
     def get_identifier(self):
         if not hasattr(self, '_ident'):
